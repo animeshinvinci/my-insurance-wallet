@@ -2,6 +2,7 @@ import * as amplitude from '@amplitude/analytics-browser'
 import mixpanel from 'mixpanel-browser'
 import { RudderAnalytics } from '@rudderstack/analytics-js'
 import posthog from 'posthog-js'
+import { initBeacon, identifyBeacon, trackBeacon, resetBeacon } from '@/lib/polaris-beacon'
 import { logEvent } from '@/lib/actions/analytics'
 
 function getSessionId(): string {
@@ -57,6 +58,10 @@ export function initRudderStack(writeKey: string, dataPlaneUrl: string) {
   rudderInitialized = true
 }
 
+export function initPolarisBeacon(apiKey: string, endpoint: string) {
+  initBeacon(apiKey, endpoint)
+}
+
 export function identify(userId: string, userProps?: Record<string, string | boolean | number>) {
   if (amplitudeInitialized) {
     amplitude.setUserId(userId)
@@ -83,6 +88,8 @@ export function identify(userId: string, userProps?: Record<string, string | boo
   if (posthogInitialized) {
     posthog.identify(userId, userProps)
   }
+
+  identifyBeacon(userId, userProps)
 }
 
 export function track(event: string, props?: Record<string, string | boolean | number | null>) {
@@ -100,6 +107,8 @@ export function track(event: string, props?: Record<string, string | boolean | n
   if (posthogInitialized) {
     posthog.capture(event, props ?? undefined)
   }
+
+  trackBeacon(event, props ?? undefined)
 
   const { screen, label, ...rest } = (props ?? {}) as Record<string, string | boolean | number | null>
   logEvent(
@@ -128,4 +137,6 @@ export function reset() {
   if (posthogInitialized) {
     posthog.reset()
   }
+
+  resetBeacon()
 }

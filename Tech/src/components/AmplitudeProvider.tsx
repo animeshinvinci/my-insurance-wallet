@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect } from 'react'
-import { initAmplitude, initMixpanel, initPostHog, initRudderStack } from '@/lib/analytics'
+import { initAmplitude, initMixpanel, initPostHog, initRudderStack, initPolarisBeacon } from '@/lib/analytics'
 
 export function AmplitudeProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
@@ -18,6 +18,11 @@ export function AmplitudeProvider({ children }: { children: React.ReactNode }) {
     const posthogKey = process.env.NEXT_PUBLIC_POSTHOG_KEY
     const posthogHost = process.env.NEXT_PUBLIC_POSTHOG_HOST ?? 'https://us.i.posthog.com'
     if (posthogKey) initPostHog(posthogKey, posthogHost)
+
+    const polarisBeaconKey = process.env.NEXT_PUBLIC_POLARIS_BEACON_KEY
+    const polarisBeaconEndpoint =
+      process.env.NEXT_PUBLIC_POLARIS_BEACON_ENDPOINT ?? 'https://demo.trydep.com/api/collect'
+    if (polarisBeaconKey) initPolarisBeacon(polarisBeaconKey, polarisBeaconEndpoint)
   }, [])
 
   return <>{children}</>

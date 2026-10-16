@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "@amplitude/analytics-browser": "^2.38.0",
+    "@depsmith/depsmith-sdk": "^0.7.0",
     "@rudderstack/analytics-js": "^3.31.0",
     "@supabase/ssr": "^0.5.2",
     "@supabase/supabase-js": "^2.47.0",
